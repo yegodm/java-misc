@@ -8,18 +8,17 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MapsTest {
-    @Mock Consumer<Entry<String, String>> leftOnly;
-    @Mock Consumer<Entry<String, String>> rightOnly;
-    @Mock Consumer<Entry<String, String>> common;
-    @Mock BiConsumer<Entry<String, String>, Entry<String, String>> diff;
+    @Mock BiConsumer<String, String> leftOnly;
+    @Mock BiConsumer<String, String> rightOnly;
+    @Mock BiConsumer<String, String> common;
+    @Mock TriConsumer<String, String, String> diff;
 
     @Test
     public void diff_no_null_values() {
@@ -35,10 +34,10 @@ public class MapsTest {
         );
         Maps.diff(left, right, leftOnly, rightOnly, common, diff);
 
-        verify(leftOnly).accept(Maps.immutableEntry("C", "c1"));
-        verify(rightOnly).accept(Maps.immutableEntry("D", "d1"));
-        verify(common).accept(Maps.immutableEntry("A", "a1"));
-        verify(diff).accept(Maps.immutableEntry("B", "b1"), Maps.immutableEntry("B", "b2"));
+        verify(leftOnly).accept("C", "c1");
+        verify(rightOnly).accept("D", "d1");
+        verify(common).accept("A", "a1");
+        verify(diff).accept("B", "b1", "b2");
         verifyNoMoreInteractions(leftOnly, rightOnly, common, diff);
     }
 
@@ -58,11 +57,11 @@ public class MapsTest {
         );
         Maps.diff(left, right, leftOnly, rightOnly, common, diff);
 
-        verify(leftOnly).accept(Maps.immutableEntry("D", null));
-        verify(rightOnly).accept(Maps.immutableEntry("E", null));
-        verify(common).accept(Maps.immutableEntry("C", null));
-        verify(diff).accept(Maps.immutableEntry("A", "a1"), Maps.immutableEntry("A", null));
-        verify(diff).accept(Maps.immutableEntry("B", null), Maps.immutableEntry("B", "b1"));
+        verify(leftOnly).accept("D", null);
+        verify(rightOnly).accept("E", null);
+        verify(common).accept("C", null);
+        verify(diff).accept("A", "a1", null);
+        verify(diff).accept("B", null, "b1");
         verifyNoMoreInteractions(leftOnly, rightOnly, common, diff);
     }
 
@@ -73,7 +72,7 @@ public class MapsTest {
 
         Maps.diff(left, right, leftOnly, rightOnly, common, diff);
 
-        verify(leftOnly).accept(Maps.immutableEntry(null, "a"));
+        verify(leftOnly).accept(null, "a");
         verifyNoMoreInteractions(leftOnly, rightOnly, common, diff);
     }
 
@@ -84,7 +83,7 @@ public class MapsTest {
 
         Maps.diff(left, right, leftOnly, rightOnly, common, diff);
 
-        verify(rightOnly).accept(Maps.immutableEntry(null, "b"));
+        verify(rightOnly).accept(null, "b");
         verifyNoMoreInteractions(leftOnly, rightOnly, common, diff);
     }
 
@@ -95,7 +94,7 @@ public class MapsTest {
 
         Maps.diff(left, right, leftOnly, rightOnly, common, diff);
 
-        verify(common).accept(Maps.immutableEntry(null, "a"));
+        verify(common).accept(null, "a");
         verifyNoMoreInteractions(leftOnly, rightOnly, common, diff);
     }
 
@@ -106,7 +105,7 @@ public class MapsTest {
 
         Maps.diff(left, right, leftOnly, rightOnly, common, diff);
 
-        verify(diff).accept(Maps.immutableEntry(null, "a"), Maps.immutableEntry(null, "b"));
+        verify(diff).accept(null, "a", "b");
         verifyNoMoreInteractions(leftOnly, rightOnly, common, diff);
     }
 
