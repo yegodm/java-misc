@@ -3,7 +3,7 @@ package xoled.java.misc.subject;
 import com.google.common.base.Defaults;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterators;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.StringReader;
 import java.lang.reflect.InvocationHandler;
