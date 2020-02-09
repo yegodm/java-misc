@@ -5,15 +5,15 @@ public enum CharSequences {
 
     /**
      * Invokes the specified callback for every pair of character subsequences
-     * separated by the provided delimiters: one is to separate elements within a pair,
-     * another - to separate pairs.
+     * separated by the provided delimiters: one is to separate pairs, another -
+     * to separate elements within a pair.<br>
      * Allocating memory for the found components is a caller responsibility. It receives
      * callback invocation with start-end positions of each of the pair elements.<br>
      * In case of missing separator for a pair, an exception is thrown.
      * The callback is invoked for any valid pair that occurs prior to the malformed one.
      * @param input The input character sequence.
-     * @param pairDelimiter Delimiter separating pair components.
-     * @param keyValueDelimiter Delimiter separating the pairs.
+     * @param pairDelimiter Delimiter separating the pairs.
+     * @param keyValueDelimiter Delimiter separating pair elements.
      * @param consumer Callback is invoked on every well-formed pair. To minimize memory impact
      *                 does not create any object, but returns start-end positions of the first
      *                 and second component, suitable for direct use with
